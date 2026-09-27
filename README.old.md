@@ -6,27 +6,12 @@
 
 ## Навигация по руководству
 
-1. [Лабораторная работа № 1: проектирование БД, классификация данных и RBAC](./docs/01-lab-1-design-and-rbac.md)
-2. [Лабораторная работа № 2: SECURITY DEFINER, тесты прав и бизнес-правила](./docs/02-lab-2-security-definer-and-tests.md)
-3. [Лабораторная работа № 3: построчная изоляция данных с RLS](./docs/03-lab-3-rls.md)
-4. [Лабораторная работа № 4 и РГЗ: представления, аудит, производительность и JIT-доступ](./docs/04-lab-4-audit-performance-and-jit.md)
+1. [Лабораторная работа № 1: проектирование БД, классификация данных и RBAC](docs/01-lab-1-design-and-rbac.md)
+2. [Лабораторная работа № 2: SECURITY DEFINER, тесты прав и бизнес-правила](docs/02-lab-2-security-definer-and-tests.md)
+3. [Лабораторная работа № 3: построчная изоляция данных с RLS](docs/03-lab-3-rls.md)
+4. [Лабораторная работа № 4 и РГЗ: представления, аудит, производительность и JIT-доступ](docs/04-lab-4-audit-performance-and-jit.md)
 
 Руководство построено как один последовательный проект. Каждый следующий раздел использует объекты, созданные в предыдущих разделах.
-
-## Готовые артефакты
-
-| Назначение | Файл |
-|---|---|
-| Полное развёртывание | [`sql/init.sql`](./sql/init.sql) |
-| Роли и схемы | [`sql/00-bootstrap.sql`](./sql/00-bootstrap.sql) |
-| DDL, данные и RBAC | [`sql/01-schema-and-rbac.sql`](./sql/01-schema-and-rbac.sql) |
-| `SECURITY DEFINER` и сравнение правил | [`sql/02-functions-and-tests.sql`](./sql/02-functions-and-tests.sql) |
-| Контекст и RLS | [`sql/03-rls.sql`](./sql/03-rls.sql) |
-| Представления, аудит и производительность | [`sql/04-views-audit-performance.sql`](./sql/04-views-audit-performance.sql) |
-| JIT-доступ | [`sql/05-jit-access.sql`](./sql/05-jit-access.sql) |
-| Сквозные проверки | [`tests/access-tests.sql`](./tests/access-tests.sql) |
-
-Графические материалы: [ER-модель](./diagrams/er-diagram.png), [роли и привилегии](./diagrams/roles.png), [поток RLS](./diagrams/rls-flow.png).
 
 ## Быстрый старт
 
@@ -102,7 +87,7 @@ psql -X -v ON_ERROR_STOP=1 -U postgres -d security_lab
 ЛР № 1 → ЛР № 2 → ЛР № 3 → ЛР № 4 → JIT-раздел РГЗ
 ```
 
-Все перечисленные сценарии уже включены в репозиторий. Его фактическая структура:
+После каждого смыслового блока сохраняйте SQL в отдельный сценарий. Рекомендуемая структура локального репозитория:
 
 ```text
 postgresql-security-labs/
@@ -128,7 +113,7 @@ postgresql-security-labs/
     └── rls-flow.png
 ```
 
-Файл `sql/init.sql` подключает остальные сценарии:
+Файл `sql/init.sql` может подключать остальные сценарии:
 
 ```sql
 \set ON_ERROR_STOP on
@@ -144,20 +129,6 @@ postgresql-security-labs/
 
 ```console
 psql -X -v ON_ERROR_STOP=1 -U postgres -d security_lab -f sql/init.sql
-```
-
-После развёртывания запустите регрессионные проверки:
-
-```console
-psql -X -v ON_ERROR_STOP=1 -U postgres -d security_lab -f tests/access-tests.sql
-```
-
-Тяжёлые учебные замеры по умолчанию пропускаются. Чтобы выполнить сравнение `CHECK`/триггера и стенд RLS на 300 000 строках, передайте параметры:
-
-```console
-psql -X -v ON_ERROR_STOP=1 \
-  -v run_benchmark=1 -v run_perf_setup=1 \
-  -U postgres -d security_lab -f sql/init.sql
 ```
 
 ---
@@ -413,3 +384,4 @@ request_temp_privilege(operation_name text, duration_min integer)
 - Не запускайте сценарии ролей и event trigger на рабочем сервере.
 - Перед повторным развёртыванием создайте логический дамп учебной БД либо пересоздайте только учебную базу.
 - Сохраняйте в отчёте версии PostgreSQL, ОС, SQL-сценариев и параметры тестового набора.
+
